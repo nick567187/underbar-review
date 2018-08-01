@@ -33,7 +33,7 @@
     describe('first', function() {
 
       it('should be able to pull out the first element of an array', function() {
-        expect(_.first([1, 2, 3])).to.equal(FILL_ME_IN);
+        expect(_.first([1, 2, 3])).to.equal(1);
       });
 
       it('should accept an index argument', function() {
@@ -43,7 +43,7 @@
       it('should return empty array if zero is passed in as the index', function() {
         // There is a very important difference between `equal` and `eql`
         // Can you discover what it is?
-        expect(_.first([1, 2, 3], 0)).to.eql(FILL_ME_IN);
+        expect(_.first([1, 2, 3], 0)).to.eql([]);
       });
 
       it('should return all the array\'s elements if the index argument is larger than the length of the array', function() {
@@ -58,7 +58,7 @@
       });
 
       it('should accept an index argument', function() {
-        expect(_.last([1, 2, 3], 2)).to.eql(FILL_ME_IN);
+        expect(_.last([1, 2, 3], 2)).to.eql([2, 3]);
       });
 
       it('should return empty array if zero is passed in as the index', function() {
@@ -66,7 +66,7 @@
       });
 
       it('should return all the array\'s elements if the index argument is larger than the length of the array', function() {
-        expect(_.last([1, 2, 3], 5)).to.eql(FILL_ME_IN);
+        expect(_.last([1, 2, 3], 5)).to.eql([1, 2, 3]);
       });
     });
 
@@ -82,26 +82,10 @@
         var result = _.each(input, _.identity);
 
         /*
-         * Mutation of inputs should be avoided without good justification otherwise
-         * as it can often lead to hard to find bugs and confusing code!
-         * Imagine we were reading the code above, and we added the following line:
-         *
+         * Mutation of inputs should be avoided without good justification otherwise as it can often lead to hard to find bugs and confusing code! Imagine we were reading the code above, and we added the following line:
          * var lastElement = input[input.length - 1];
-         *
-         * Without knowing that mutation occured inside of each,
-         * we would assume that `lastElement` is 5. But if inside of
-         * each, we use the array method `pop`, we would permanently
-         * change `input` and our assumption would not longer be true,
-         * `lastElement` would be 4 instead!
-         *
-         * The tricky part is that we have no way of knowing about the mutation
-         * just by looking at the code above. We'd have to dive into the
-         * implementation of each to the exact line that uses `pop`.
-         * If we write a lot of code with this assumption, it might be very hard
-         * to trace back to the correct line in each.
-         *
-         * You can avoid an entire class of bugs by writing functions
-         * that don't mutate their inputs!
+         * Without knowing that mutation occured inside of each, we would assume that `lastElement` is 5. But if inside of each, we use the array method `pop`, we would permanently change `input` and our assumption would not longer be true, `lastElement` would be 4 instead!
+         * The tricky part is that we have no way of knowing about the mutation just by looking at the code above. We'd have to dive into the implementation of each to the exact line that uses `pop`. If we write a lot of code with this assumption, it might be very hard to trace back to the correct line in each. You can avoid an entire class of bugs by writing functions that don't mutate their inputs!
          */
 
         expect(input).to.eql([1, 2, 3, 4, 5]);
@@ -126,7 +110,7 @@
           iterations.push([letter, index]);
         });
 
-        expect(iterations).to.eql(FILL_ME_IN);
+        expect(iterations).to.eql([['a', 0], ['b', 1], ['c', 2]]);
       });
 
       it('should iterate over arrays and provide access to the original collection', function() {
@@ -153,7 +137,7 @@
           iterations.push(letter);
         });
 
-        expect(iterations).to.not.include(FILL_ME_IN);
+        expect(iterations).to.not.include(letters.someProperty);
       });
 
       it('should iterate over objects and provide access to each value', function() {
@@ -219,7 +203,7 @@
       it('should find 40 in the list', function() {
         var numbers = [10, 20, 30, 40, 50];
 
-        expect(_.indexOf(FILL_ME_IN, 40)).to.equal(3);
+        expect(_.indexOf(numbers, 40)).to.equal(3);
       });
 
       it('should be able to compute indexOf even when the native function is undefined', function() {
@@ -229,14 +213,14 @@
       });
 
       it('returns -1 when the target cannot be found not in the list', function() {
-        var numbers = FILL_ME_IN;
+        var numbers = [1, 2, 3];
 
         expect(_.indexOf(numbers, 35)).to.equal(-1);
       });
 
       it('returns the first index that the target can be found at when there are multiple matches', function() {
-        var numbers = FILL_ME_IN;
-        expect(FILL_ME_IN).to.equal(1);
+        var numbers = [0, 1, 2, 1, 1];
+        expect(_.indexOf(numbers, 1)).to.equal(1);
       });
     });
 
@@ -251,9 +235,9 @@
 
       it('should return all odd numbers in an array', function() {
         var isOdd = function(num) { return num % 2 !== 0; };
-        var odds = FILL_ME_IN;
+        var odds = [1, 2, 3, 4, 5];
 
-        expect(odds).to.eql([1, 3, 5]);
+        expect(_.filter(odds, isOdd)).to.eql([1, 3, 5]);
       });
 
       it('should produce a brand new array instead of modifying the input array', function() {
@@ -332,7 +316,7 @@
         var iterator = function(value) { return value === 1; };
         var numbers = [1, 2, 2, 3, 4, 4];
 
-        expect(_.uniq(FILL_ME_IN)).to.eql([1, 2]);
+        expect(_.uniq(numbers, true, iterator)).to.eql([1, 2]);
       });
 
       it('should produce a brand new array instead of modifying the input array', function() {
@@ -376,7 +360,7 @@
       });
 
       it('should apply a function to every value in an array', function() {
-        var multiplyByTwo = FILL_ME_IN;
+        var multiplyByTwo = function(x) { return x * 2; };
 
         expect(_.map([1, 2, 3], multiplyByTwo)).to.eql([2, 4, 6]);
       });
@@ -399,7 +383,7 @@
           { name: 'curly', age: 50 }
         ];
 
-        expect(_.pluck(people, 'name')).to.FILL_ME_IN(['moe', 'curly']);
+        expect(_.pluck(people, 'name')).to.eql(['moe', 'curly']);
       });
 
       it('should not modify the original array', function() {
@@ -410,7 +394,7 @@
 
         _.pluck(people, 'name');
 
-        expect(people).to.FILL_ME_IN([{ name: 'moe', age: 30 }, { name: 'curly', age: 50 }]);
+        expect(people).to.eql([{ name: 'moe', age: 30 }, { name: 'curly', age: 50 }]);
       });
     });
 
@@ -464,14 +448,17 @@
       });
 
       it('should pass items of the array into the iterator from left to right', function() {
-        var orderTraversed = [];
+        var orderTraversed = _.reduce(
 
-        _.reduce([1, 2, 3, 4], function(memo, item) {
-          // FILL_ME_IN
-          // Add a line here that makes this test pass
-          // for a working implementation of reduce
-          return memo;
-        }, 10);
+          [1, 2, 3, 4], /* array */
+
+          function(memo, item) { /* iterator */
+            return item;
+          },
+
+          [] /* accumulator */
+
+        );
 
         expect(orderTraversed).to.eql([1, 2, 3, 4]);
       });
@@ -499,7 +486,7 @@
         expect(result).to.equal(4);
       });
 
-      it('Fill me in with a description of the behavior this test is checking for', function() {
+      it('Should find the product of all numbers in an array', function() {
         var result = _.reduce([1, 2, 3], function(memo, item) {
           return memo * item;
         }, 0);

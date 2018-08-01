@@ -7,6 +7,7 @@
   // seem very useful, but remember it--if a function needs to provide an
   // iterator when the user does not pass one in, this will be handy.
   _.identity = function(val) {
+    return val;
   };
 
   /**
@@ -31,12 +32,21 @@
   // Return an array of the first n elements of an array. If n is undefined,
   // return just the first element.
   _.first = function(array, n) {
+    if (n === 0) {
+      return []; 
+    }
     return n === undefined ? array[0] : array.slice(0, n);
   };
 
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
+    if (n === 0) {
+      return []; 
+    } else if (n > array.length) {
+      return array;
+    }
+    return n === undefined ? array[array.length - 1] : array.slice(n - 1, array.length);
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -45,6 +55,15 @@
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
+    if (Array.isArray(collection)) {
+      for (let i = 0; i < collection.length; i++) {
+        iterator(collection[i], i, collection);
+      }
+    } else {
+      for (let i in collection) {
+        iterator(collection[i], i, collection);
+      }
+    }
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -66,16 +85,40 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+    let arr = [];
+    _.each(collection, function (value, key, collection) {
+      if (test(value)) {
+      // if(test(value) == 1) {
+        arr.push(value);
+      }
+    });
+    return arr;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
-    // TIP: see if you can re-use _.filter() here, without simply
-    // copying code in and modifying it
+    return _.filter(collection, function(value) {
+      return test(value) === false;
+    });
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+    let set = new Set(array);
+    let arr = Array.from(set);
+
+    if (iterator !== undefined) {
+      let iterated = [];
+      _.each(array, function(value, index, collection) {
+        iterated.push(iterator(value));
+      });
+      
+      let result = [array[_.indexOf(iterated, true)], array[_.indexOf(iterated, false)]];
+    
+      return result;
+    }
+    return arr;
+
   };
 
 
@@ -84,6 +127,21 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    let result;
+    if (Array.isArray(collection)) {
+      result = [];
+      _.each(collection, function(value, index, array) {
+        result.push(iterator(value, index, array));
+      });
+    } else if (typeof collection === 'object') {
+      result = {};
+      _.each(collection, function(value, key, object) {
+        result[key] = value;     
+      });
+    }
+    return result;
+
+    // _.each....
   };
 
   /*
@@ -125,6 +183,20 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    _.each(collection, function(value, key, list) {
+      debugger;
+      if (accumulator === undefined && key === 0) {
+        accumulator = collection[0];
+      } else if (Array.isArray(accumulator)) {
+        accumulator.push(iterator(accumulator, value, key, collection));
+      } else if (typeof accumulator === 'object') {
+        accumulator[key] = iterator(accumulator, value, key, collection);
+      } else {
+        accumulator = iterator(accumulator, value, key, collection);
+      }
+    
+    });
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
